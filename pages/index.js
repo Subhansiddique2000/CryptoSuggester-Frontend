@@ -1,82 +1,130 @@
 import Head from 'next/head'
+import Banner from '../components/Banner'
+import SmallCard from '../components/SmallCard';
+import Header from '../components/Header'
+import Image from "next/image"
+import BuySuggester from '../components/BuySuggester';
+import SellSuggester from '../components/SellSuggester';
 
-export default function Home() {
+
+export default function Home({exchangeAData, exchangeBbitcoin,exchangeBethereum,}) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className=" bg-x">
       <Head>
-        <title>Create Next App</title>
+        <title>Cryptocurrency Suggester</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
-
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+      <Header />
+      <Banner />
+      <main className = 'max-w-7xl mx-auto px-8 sm:px-16 '>
+        <section className='pt-6'>
+          <h2 className= 'text-2xl text-x font-semibold'>Prices at CoinGecko</h2>
+          {/* Pull some data from API */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+          {exchangeAData?.map(({name, symbol, image, current_price,}) => (
+            <SmallCard 
+            key={image}
+            image={image} 
+            symbol={symbol} 
+            name={name} 
+            current_price={current_price}/>
+          ))}
+          </div>
+        </section>
+        <section className='pt-6'>
+          <h2 className= 'text-2xl text-x font-semibold'>Prices at Coinpaprika</h2>
+          {/* Pull some data from API */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+          <div>
+          {exchangeBbitcoin?.map(({open, market_cap}) => (
+            <SmallCard 
+            key={market_cap}
+            image={"https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579"} 
+            symbol={'btc'} 
+            name={`Bitcoin`} 
+            current_price={open}
+            />
+          ))}
+          </div>
+          <div>
+          {exchangeBethereum?.map(({open, market_cap}) => (
+            <SmallCard 
+            key={market_cap}
+            image={"https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880"} 
+            symbol={'eth'} 
+            name={`Ethereum`} 
+            current_price={open}
+            />
+          ))}
+          </div>
+          </div>
+        </section>
+        {/* BUY */}
+        <section className='pt-6'>
+          <h2 className= 'text-2xl text-x font-semibold'>Buy your Crypto Here</h2>
+          {/* Pull some data from API */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+        <BuySuggester 
+        priceA = {exchangeAData[0].current_price}
+        priceB = {exchangeBbitcoin.open}
+        name = {exchangeAData[0].name}
+        image= {exchangeAData[0].image}
+        symbol = {exchangeAData[0].symbol}
+        />
+        <BuySuggester 
+        priceA = {exchangeAData[1].current_price}
+        priceB = {exchangeBethereum.open}
+        name = {exchangeAData[1].name}
+        image= {exchangeAData[1].image}
+        symbol = {exchangeAData[1].symbol}
+        />
+          </div>
+        </section>
+        {/* BUY */}
+        {/* SELL */}
+        <section className='pt-6'>
+          <h2 className= 'text-2xl text-x font-semibold'>Sell your Crypto Here</h2>
+          {/* Pull some data from API */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+        <SellSuggester 
+        priceA = {exchangeAData[0].current_price}
+        priceB = {exchangeBbitcoin.open}
+        name = {exchangeAData[0].name}
+        image= {exchangeAData[0].image}
+        symbol = {exchangeAData[0].symbol}
+        />
+        <SellSuggester 
+        priceA = {exchangeAData[1].current_price}
+        priceB = {exchangeBethereum.open}
+        name = {exchangeAData[1].name}
+        image= {exchangeAData[1].image}
+        symbol = {exchangeAData[1].symbol}
+        />
+          </div>
+        </section>
+        {/* SELL*/}
       </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
     </div>
   )
+}
+export async function getStaticProps(){
+  const exchangeAData = await fetch("http://localhost:8080/exchangeAData").then(
+    (res) => res.json()
+  );
+
+  const exchangeBbitcoin = await fetch("http://localhost:8080/exchangeBbitcoin").then(
+    (res) => res.json()
+  );
+
+  const exchangeBethereum = await fetch("http://localhost:8080/exchangeBethereum").then(
+    (res) => res.json()
+  );
+  return{
+    props: {
+      exchangeAData,
+      exchangeBbitcoin,
+      exchangeBethereum,
+    },
+  };
 }
